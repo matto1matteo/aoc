@@ -1,7 +1,9 @@
 #include <iostream>
+#include <aoc/aoc.hpp>
 
 int main (int argc, char *argv[]) {
     
-    std::cout << "Henloooo" << std::endl;
+    mtt::AOC aoc;
+    aoc.printProblemSolutions();
     return 0;
 }
