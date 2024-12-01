@@ -7,6 +7,7 @@
 namespace mtt {
 
 Day01::Day01(std::istream& stream)
+    : DailyProblem(1)
 {
     std::string line;
     while (std::getline(stream, line)) {

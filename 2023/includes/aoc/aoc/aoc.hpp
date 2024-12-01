@@ -7,12 +7,15 @@ namespace mtt {
 
 class DailyProblem {
 public:
+    DailyProblem(int day)
+        : day(day)
+    {}
     /// `print_solution` will print the solution for the problem
     virtual void printSolution() = 0;
 
     /// getter
     int getDay() const {
-        return day + 1;
+        return day;
     }
 
 private:

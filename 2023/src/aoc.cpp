@@ -11,6 +11,9 @@ AOC::AOC()
 {
     std::fstream file(BASE_PATH + "/" + "day01.txt");
     problems[0] = new Day01(file);
+    file.close();
+    file.open(BASE_PATH + "/" + "day02.txt");
+    problems[1] = new Day02(file);
 }
 
 const DailyProblem* AOC::getProblem(std::size_t day) const

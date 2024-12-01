@@ -24,6 +24,7 @@ set(aoc_sources
 
 set(aoc_daily
     "src/day01.cpp"
+    "src/day02.cpp"
 )
 
 set(aoc_headers
