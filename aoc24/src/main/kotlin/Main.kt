@@ -7,6 +7,7 @@ fun main() {
         null
     }
     problems[0] = Day01("day01.txt")
+    problems[1] = Day02("day02.txt")
 
     for (i in problems.indices)
     {
