@@ -1,4 +1,4 @@
-package com.github.matto1matteo
+package com.github.matto1matteo.problems
 
 import kotlin.math.abs
 
@@ -40,14 +40,14 @@ class Record(private val levels: List<Int>)
 class Day02(override var fileName: String) : Problem {
     override fun firstSolution(): String {
         val input = this.javaClass.getResourceAsStream("/$fileName")?.bufferedReader()?.readLines()
-        val records = input?.map { l -> Record(l.split(" ").map { it.toInt() })}
+        val records = input?.map { l -> Record(l.split(" ").map { it.toInt() }) }
 
         return records?.count { r -> r.isSafe() }.toString()
     }
 
     override fun secondSolution(): String {
         val input = this.javaClass.getResourceAsStream("/$fileName")?.bufferedReader()?.readLines()
-        val records = input?.map { l -> Record(l.split(" ").map { it.toInt() })}
+        val records = input?.map { l -> Record(l.split(" ").map { it.toInt() }) }
 
         return records?.count { r -> r.isSafe2() }.toString()
     }

@@ -1,4 +1,4 @@
-package com.github.matto1matteo
+package com.github.matto1matteo.problems
 
 import kotlin.math.abs
 
