@@ -1,9 +1,6 @@
 package com.github.matto1matteo
 
-import com.github.matto1matteo.problems.Day01
-import com.github.matto1matteo.problems.Day02
-import com.github.matto1matteo.problems.Day03
-import com.github.matto1matteo.problems.Problem
+import com.github.matto1matteo.problems.*
 
 fun main() {
     println("Hello")
@@ -14,6 +11,7 @@ fun main() {
     problems[0] = Day01("day01.txt")
     problems[1] = Day02("day02.txt")
     problems[2] = Day03("day03.txt")
+    problems[3] = Day04("day04.txt")
 
     for (i in problems.indices)
     {
