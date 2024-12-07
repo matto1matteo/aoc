@@ -109,14 +109,14 @@ class Puzzle(private val nodes: List<List<Char>>) {
 
 class Day04(override var fileName: String) : Problem {
     override fun firstSolution(): String {
-        val reader = readResource(fileName)
+        val reader = readResource()
         val puzzleInput : MutableList<List<Char>> = mutableListOf()
         var i = 0
-        var line = reader?.readLine()
+        var line = reader.readLine()
         while (line != null) {
             puzzleInput.add(line.toList())
             i++
-            line = reader?.readLine()
+            line = reader.readLine()
         }
 
         val puzzle = Puzzle(puzzleInput)
@@ -125,14 +125,14 @@ class Day04(override var fileName: String) : Problem {
     }
 
     override fun secondSolution(): String {
-        val reader = readResource(fileName)
+        val reader = readResource()
         val puzzleInput : MutableList<List<Char>> = mutableListOf()
         var i = 0
-        var line = reader?.readLine()
+        var line = reader.readLine()
         while (line != null) {
             puzzleInput.add(line.toList())
             i++
-            line = reader?.readLine()
+            line = reader.readLine()
         }
 
         val puzzle = Puzzle(puzzleInput)

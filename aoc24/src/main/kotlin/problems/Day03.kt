@@ -2,7 +2,7 @@ package com.github.matto1matteo.problems
 
 class Day03(override var fileName: String) : Problem {
     override fun firstSolution(): String {
-        val reader = readResource(fileName) ?: throw Exception()
+        val reader = readResource()
         val regex = Regex("mul\\((\\d{1,3}),(\\d{1,3})\\)")
         val text = reader.readText()
         return regex.findAll(text)
@@ -12,7 +12,7 @@ class Day03(override var fileName: String) : Problem {
     }
 
     override fun secondSolution(): String {
-        val reader = readResource(fileName) ?: throw Exception()
+        val reader = readResource()
         // (mul\([0-999],[0-999]\)|do\(\)|don't\(\))
         val regex = Regex("mul\\((\\d{1,3}),(\\d{1,3})\\)|do\\(\\)|don't\\(\\)")
         val text = reader.readText()
