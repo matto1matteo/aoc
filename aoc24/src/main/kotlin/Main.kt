@@ -9,6 +9,7 @@ fun main() {
     problems[2] = Day03("day03.txt")
     problems[3] = Day04("day04.txt")
     problems[4] = Day05("day05.txt")
+    problems[5] = Day06("day06.txt")
 
     for ((i, problem) in problems.withIndex())
     {

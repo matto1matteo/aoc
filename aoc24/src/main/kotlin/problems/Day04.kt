@@ -24,6 +24,10 @@ class Vec2(val x: Int, val y: Int) {
         )
     }
 
+    override public fun toString(): String {
+        return "Vec2(x: $x, y: $y)"
+    }
+
     operator fun plus(vec: Vec2) : Vec2 {
         return Vec2(this.x + vec.x, this.y + vec.y)
     }
