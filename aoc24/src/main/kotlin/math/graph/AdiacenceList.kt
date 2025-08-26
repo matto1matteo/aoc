@@ -1,10 +1,10 @@
 package com.github.matto1matteo.math.graph
 
-import com.github.matto1matteo.math.graph.iterators.AdiacenceListBreadth
+import com.github.matto1matteo.math.graph.iterators.AdjacencyListBreadth
 import com.github.matto1matteo.math.graph.strategies.VisitStrategy
 
 class AdiacenceList<T, L>(val nodes: HashMap<Node<T, L>, MutableList<Node<T, L>>>): Graph<T, L> {
-    var root: Node<T, L> = nodes.keys.first()
+    var root: Node<T, L>? = nodes.keys.firstOrNull()
         get() = field
         private set(value) {
             field = value
@@ -68,7 +68,7 @@ class AdiacenceList<T, L>(val nodes: HashMap<Node<T, L>, MutableList<Node<T, L>>
     }
 
     override fun iterator(): Iterator<Node<T, L>> {
-        return AdiacenceListBreadth<T, L>(this)
+        return AdjacencyListBreadth<T, L>(this)
     }
 
     override fun visit(
