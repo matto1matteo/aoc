@@ -2,39 +2,39 @@ package com.github.matto1matteo.math.graph.iterators
 
 import com.github.matto1matteo.collections.ListQueue
 import com.github.matto1matteo.collections.Queue
-import com.github.matto1matteo.math.graph.AdiacenceList
+import com.github.matto1matteo.math.graph.AdjacencyList
 import com.github.matto1matteo.math.graph.Node
 
 class AdjacencyListBreadth<T, L> : BreadthIterator<T, L> {
-    private val graph: AdiacenceList<T, L>
+    private val graph: AdjacencyList<T, L>
     private val queue: Queue<Node<T, L>>
-    private val visited: Set<Node<T, L>>
+    private val visited: MutableSet<Node<T, L>>
+    private var cursor: Node<T,L>?
 
-    constructor(graph: AdiacenceList<T, L>) : super() {
+    constructor(graph: AdjacencyList<T, L>) : super() {
         this.graph = graph
         this.queue = ListQueue()
-        this.visited = setOf()
-        if (graph.root != null) {
-            this.queue.append(graph.root!!)
-        }
+        this.visited = mutableSetOf()
+        this.cursor = graph.map.keys.firstOrNull()
     }
 
 
     override fun hasNext(): Boolean {
-        return graph.nodes.any{n -> !n.key.visited }
+        return cursor != null
     }
 
     override fun next(): Node<T, L> {
         if (!hasNext()) {
             throw NoSuchElementException("No more nodes to iterate from the given root")
         }
-        var node = queue.pop()!!
-        while (node.visited) {
-            node = queue.pop()!!
-        }
-        node.visited = true
-        val nodes = graph.nodes[node] ?: mutableListOf()
-        queue.append(nodes)
+
+        val node = cursor!!
+        val adjacentNodes = graph
+            .getAdjacentNodes(node)
+        queue.append(adjacentNodes)
+        cursor = queue.pop()
+
+        // Update current
         return node
     }
 }

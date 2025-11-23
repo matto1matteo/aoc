@@ -6,6 +6,9 @@ import kotlin.collections.Iterable
 import kotlin.collections.Iterator
 
 interface Graph<T, L>: Iterable<Node<T, L>> {
+    val nodes: List<Node<T, L>>
+    val edges: List<Pair<Node<T, L>, Node<T, L>>>
+
     fun hasCycle(node: Node<T, L>): Boolean {
         return hasCycle(node.label)
     }

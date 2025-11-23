@@ -1,6 +1,10 @@
 package com.github.matto1matteo.problems
 
+import com.github.matto1matteo.math.graph.AdjacencyList
+import com.github.matto1matteo.math.graph.Graph
+
 class Day06(override val fileName: String) : Problem {
+    private var grid: Grid? = null
     override fun firstSolution(): String {
         val reader = readResource()
         var line : String?
@@ -23,13 +27,17 @@ class Day06(override val fileName: String) : Problem {
             gridMap.add(gridRow)
         }
 
-        val grid = Grid(gridMap, guard)
+        grid = Grid(gridMap, guard)
 
-        while (grid.canMove()) {
-            grid.moveGuard()
+        while (grid!!.canMove()) {
+            grid!!.moveGuard()
         }
 
-        return grid.visited.toString()
+        return grid!!.visited.toString()
+    }
+
+    private fun createGraph(): Graph<Vec2, String> {
+        TODO("NotImplementedYet")
     }
 
     override fun secondSolution(): String {
@@ -38,12 +46,15 @@ class Day06(override val fileName: String) : Problem {
         var lineIndex = 0
         var guard = Guard(Direction.DOWN, Vec2(0, 0))
         val gridMap = mutableListOf<MutableList<Cell>>()
+
         while (reader.readLine().also { line = it } != null) {
             val row = line!!.toCharArray()
             val gridRow = mutableListOf<Cell>()
             for ((index, cellChar) in row.withIndex()) {
                 if (Direction.entries.map { it.d }.contains(cellChar)) {
-                    guard = Guard(Direction.fromChar(cellChar), Vec2(index, lineIndex))
+                    guard = Guard
+                        .fromDirectionChar(cellChar)
+                        .withPosition(Vec2(index, lineIndex))
                     gridRow.add(Cell(CellStatus.FREE))
                     continue
                 }
@@ -54,13 +65,14 @@ class Day06(override val fileName: String) : Problem {
             gridMap.add(gridRow)
         }
 
-        val grid = Grid(gridMap, guard)
-        while(grid.canMove()) {
-            grid.moveGuard2()
+        val startPosition = guard.position
+        grid = Grid(gridMap, guard)
+        val graph = createGraph()
+        while(grid!!.canMove()) {
+            grid!!.moveGuard2(graph)
         }
 
-
-        return grid.newObstacles.toString()
+        return grid!!.newObstacles.toString()
     }
 }
 
@@ -111,25 +123,8 @@ class Grid(private val positions: List<List<Cell>>, private val guard: Guard) {
         guard.move()
     }
 
-    fun moveGuard2() {
-        val nextPosition = guard.position + guard.direction.vec
-        val cell = at(guard.position)
-        if (at(guard.position + guard.direction.rotate().vec).status == CellStatus.VISITED) {
-            newObstacles++
-        }
-        if (at(nextPosition).status == CellStatus.OCCUPIED) {
-            cell.visit(guard.direction)
-            guard.rotate()
-            newObstacles--
-            return
-        }
-
-        if (cell.status != CellStatus.VISITED) {
-            cell.visit(guard.direction)
-        }
-
-        guard.move()
-
+    fun moveGuard2(graph: Graph<Vec2, String>) {
+        TODO("NON implementato")
     }
 
     override fun toString(): String {
@@ -166,12 +161,23 @@ enum class CellStatus(val c: Char) {
 }
 
 class Guard(var direction: Direction, var position: Vec2) {
+
+    companion object {
+        fun fromDirectionChar(c: Char): Guard {
+            return Guard(Direction.fromChar(c), Vec2(0, 0))
+        }
+    }
     fun rotate() {
         direction = direction.rotate()
     }
 
     fun move() {
         position += direction.vec
+    }
+
+    fun withPosition(position: Vec2): Guard {
+        this.position = position
+        return this
     }
 }
 

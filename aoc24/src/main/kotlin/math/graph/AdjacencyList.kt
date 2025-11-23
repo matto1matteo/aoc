@@ -3,32 +3,17 @@ package com.github.matto1matteo.math.graph
 import com.github.matto1matteo.math.graph.iterators.AdjacencyListBreadth
 import com.github.matto1matteo.math.graph.strategies.VisitStrategy
 
-class AdiacenceList<T, L>(val nodes: HashMap<Node<T, L>, MutableList<Node<T, L>>>): Graph<T, L> {
-    var root: Node<T, L>? = nodes.keys.firstOrNull()
-        get() = field
-        private set(value) {
-            field = value
-        }
-    companion object {
-        fun <T, L>withRoot(graph: AdiacenceList<T, L>, node: Node<T, L>): AdiacenceList<T, L> {
-            val n = graph.nodes.keys
-                .firstOrNull { n1 -> n1.label == node.label }
-            if (n == null)
-                return graph
+class AdjacencyList<T, L>(val map: HashMap<Node<T, L>, MutableList<Node<T, L>>>): Graph<T, L> {
 
-            graph.root = n
-            return graph
+    override val nodes: List<Node<T, L>>
+        get() = map.keys.toList()
+    override val edges: List<Pair<Node<T, L>, Node<T, L>>>
+        get() = map.flatMap {
+            n -> n.value.map { Pair(n.key, it) }
         }
-    }
-    fun findWithLabel(label: L): Node<T, L> {
-        return nodes.keys.first { n -> n.label == label }
-    }
 
-    fun hasIncident(source: L, dest: L): Boolean {
-        return nodes
-            .filter { n -> n.key.label == source }
-            .values.single()
-            .any { n -> n.label == dest }
+    fun getAdjacentNodes(node: Node<T, L>): List<Node<T,L>> {
+        return map[node]?.toList() ?: listOf()
     }
 
     override fun hasPath(
@@ -37,7 +22,7 @@ class AdiacenceList<T, L>(val nodes: HashMap<Node<T, L>, MutableList<Node<T, L>>
         strategy: VisitStrategy<T, L>,
         iterator: Iterator<Node<T, L>>
     ): Boolean {
-        val incidents = nodes
+        val incidents = map
             .filter { t -> t.key.label == source }
             .values.firstOrNull()
 
@@ -54,7 +39,7 @@ class AdiacenceList<T, L>(val nodes: HashMap<Node<T, L>, MutableList<Node<T, L>>
         visitStrategy: VisitStrategy<T, L>,
         iterator: Iterator<Node<T, L>>
     ): Boolean {
-        val toCheck = nodes
+        val toCheck = map
             .filter { t -> t.key.label == label }
             .values.firstOrNull()
             // ignore trivial loop
@@ -68,7 +53,7 @@ class AdiacenceList<T, L>(val nodes: HashMap<Node<T, L>, MutableList<Node<T, L>>
     }
 
     override fun iterator(): Iterator<Node<T, L>> {
-        return AdjacencyListBreadth<T, L>(this)
+        return AdjacencyListBreadth(this)
     }
 
     override fun visit(
