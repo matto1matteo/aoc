@@ -1,37 +1,8 @@
 package com.github.matto1matteo.problems
 
+import com.github.matto1matteo.math.vectors.Vec2
 
-class Vec2(val x: Int, val y: Int) {
-    companion object {
-        val directions = listOf(
-            Vec2(0, -1),
-            Vec2(1, -1),
-            Vec2(1, 0),
-            Vec2(1, 1),
-            Vec2(0, 1),
-            Vec2(-1, 1),
-            Vec2(-1, 0),
-            Vec2(-1, -1),
-        )
 
-        val topL = listOf(
-            Vec2(-1, -1),
-            Vec2(1, 1)
-        )
-        val bottomL = listOf(
-            Vec2(-1, 1),
-            Vec2(1, -1)
-        )
-    }
-
-    override public fun toString(): String {
-        return "Vec2(x: $x, y: $y)"
-    }
-
-    operator fun plus(vec: Vec2) : Vec2 {
-        return Vec2(this.x + vec.x, this.y + vec.y)
-    }
-}
 class Puzzle(private val nodes: List<List<Char>>) {
     private fun find(word: String, position: Vec2, direction: Vec2) : Boolean {
         if (word.isEmpty()) {
