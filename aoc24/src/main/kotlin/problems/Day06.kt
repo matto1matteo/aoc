@@ -75,8 +75,8 @@ class Day06(override val fileName: String) : Problem {
         val startPosition = guard.position
         val graph = grid.createGraph()
         while(grid.canMove()) {
-            val node = Node(guard.nextPosition(), "")
-            if (node.value != startPosition) {
+            val node = Node(guard.nextPosition())
+            if (node.label != startPosition) {
                 graph.addObstacles(node)
                 if (graph.hasCycle(node)) {
                     grid.newObstacles++
@@ -100,32 +100,32 @@ class Day06(override val fileName: String) : Problem {
  * coming from its right -> it's above
  * coming from its left -> it's below
  */
-fun AdjacencyList<Vec2, String>.addObstacles(node: Node<Vec2, String>) {
+fun AdjacencyList<Vec2>.addObstacles(node: Node<Vec2>) {
     // old obstacles new edges with new node
     Direction.entries.forEach { direction ->
         when(direction) {
             Direction.DOWN -> {
                 val n = nodes
-                    .filter { (value, _) -> value.x == (node.value.x - 1) && value.y > node.value.y }
-                    .minByOrNull { it.value.y }
+                    .filter { (label) -> label.x == (node.label.x - 1) && label.y > node.label.y }
+                    .minByOrNull { it.label.y }
                 map[n]?.add(node)
             }
             Direction.UP -> {
                 val n = nodes
-                    .filter { (value, _) -> value.x == (node.value.x + 1) && value.y < node.value.y}
-                    .maxByOrNull { it.value.y }
+                    .filter { (label) -> label.x == (node.label.x + 1) && label.y < node.label.y}
+                    .maxByOrNull { it.label.y }
                 map[n]?.add(node)
             }
             Direction.LEFT -> {
                 val n = nodes
-                    .filter { (value, _) -> value.y == (node.value.y - 1) && value.x < node.value.x}
-                    .maxByOrNull { it.value.x }
+                    .filter { (label) -> label.y == (node.label.y - 1) && label.x < node.label.x}
+                    .maxByOrNull { it.label.x }
                 map[n]?.add(node)
             }
             Direction.RIGHT -> {
                 val n = nodes
-                    .filter { (value, _) -> value.y == (node.value.y + 1) && value.x > node.value.x}
-                    .minByOrNull { it.value.x }
+                    .filter { (label) -> label.y == (node.label.y + 1) && label.x > node.label.x}
+                    .minByOrNull { it.label.x }
                 map[n]?.add(node)
             }
         }
@@ -135,23 +135,23 @@ fun AdjacencyList<Vec2, String>.addObstacles(node: Node<Vec2, String>) {
     val obstacles = Direction.entries.map { direction ->
         when(direction) {
             Direction.DOWN -> nodes
-                .filter { it.value.y == (node.value.y + 1) && it.value.x > node.value.x }
-                .minByOrNull { it.value.x }
+                .filter { it.label.y == (node.label.y + 1) && it.label.x > node.label.x }
+                .minByOrNull { it.label.x }
             Direction.UP -> nodes
-                .filter { it.value.y == (node.value.y) - 1 && it.value.x < node.value.x }
-                .maxByOrNull { it.value.x }
+                .filter { it.label.y == (node.label.y) - 1 && it.label.x < node.label.x }
+                .maxByOrNull { it.label.x }
             Direction.LEFT -> nodes
-                .filter { it.value.x == (node.value.x + 1) && it.value.y < node.value.y }
-                .maxByOrNull { it.value.y }
+                .filter { it.label.x == (node.label.x + 1) && it.label.y < node.label.y }
+                .maxByOrNull { it.label.y }
             Direction.RIGHT -> nodes
-                .filter { it.value.x == (node.value.x - 1) && it.value.y > node.value.y }
-                .minByOrNull { it.value.y }
+                .filter { it.label.x == (node.label.x - 1) && it.label.y > node.label.y }
+                .minByOrNull { it.label.y }
         }
     }
     this.map[node] = obstacles.filterNotNull().toMutableList()
 }
 
-fun AdjacencyList<Vec2, String>.removeObstacles(node: Node<Vec2, String>) {
+fun AdjacencyList<Vec2>.removeObstacles(node: Node<Vec2>) {
     map.remove(node)
     for ((_, v) in map) {
         v.remove(node)
@@ -235,8 +235,8 @@ class Grid(private val positions: List<List<Cell>>, val guard: Guard) {
         return builder.toString()
     }
 
-    fun createGraph(): AdjacencyList<Vec2, String> {
-        val nodes = hashMapOf<Node<Vec2, String>, MutableList<Node<Vec2, String>>>()
+    fun createGraph(): AdjacencyList<Vec2> {
+        val nodes = hashMapOf<Node<Vec2>, MutableList<Node<Vec2>>>()
         for ((i, line) in positions.withIndex()) {
             for ((j, cell) in line.withIndex()) {
                 if (cell.status == CellStatus.OCCUPIED) {
@@ -248,8 +248,8 @@ class Grid(private val positions: List<List<Cell>>, val guard: Guard) {
         return AdjacencyList(nodes)
     }
 
-    fun addObstacles(position: Vec2): Pair<Node<Vec2, String>, MutableList<Node<Vec2, String>>> {
-        val pair = Pair(Node(position, ""), mutableListOf<Node<Vec2, String>>())
+    fun addObstacles(position: Vec2): Pair<Node<Vec2>, MutableList<Node<Vec2>>> {
+        val pair = Pair(Node(position), mutableListOf<Node<Vec2>>())
         for (d in Direction.entries) {
             when (d) {
                 Direction.UP -> {
@@ -280,7 +280,7 @@ class Grid(private val positions: List<List<Cell>>, val guard: Guard) {
         }
         return  pair
     }
-    private fun obstacleUp(position: Vec2): Node<Vec2, String>? {
+    private fun obstacleUp(position: Vec2): Node<Vec2>? {
         val y = position.y - 1
         if (y < 0) {
             return  null
@@ -288,25 +288,25 @@ class Grid(private val positions: List<List<Cell>>, val guard: Guard) {
 
         for (j in position.x downTo 0) {
             if (at(j, y).status == CellStatus.OCCUPIED) {
-                return Node(Vec2(j, position.y-1), "")
+                return Node(Vec2(j, position.y-1))
             }
         }
         return null
     }
-    private fun obstacleDown(position: Vec2): Node<Vec2, String>? {
+    private fun obstacleDown(position: Vec2): Node<Vec2>? {
         if (position.y + 1 >= positions.size) {
             return null
         }
 
         for (j in position.x until positions.size) {
             if (at(j, position.y+1).status == CellStatus.OCCUPIED) {
-                return Node(Vec2(j, position.y+1), "")
+                return Node(Vec2(j, position.y+1))
             }
         }
 
         return null
     }
-    private fun obstacleLeft(position: Vec2): Node<Vec2, String>? {
+    private fun obstacleLeft(position: Vec2): Node<Vec2>? {
         val x = position.x - 1
         if (x < 0) {
             return null
@@ -314,20 +314,20 @@ class Grid(private val positions: List<List<Cell>>, val guard: Guard) {
 
         for (j in position.y until positions.first().size) {
             if (at(x, j).status == CellStatus.OCCUPIED) {
-                return Node(Vec2(position.x-1, j), "")
+                return Node(Vec2(position.x-1, j))
             }
         }
 
         return null
     }
-    private fun obstacleRight(position: Vec2): Node<Vec2, String>? {
+    private fun obstacleRight(position: Vec2): Node<Vec2>? {
         if (position.x + 1 >= positions.first().size) {
             return null
         }
 
         for (j in position.y downTo 0) {
             if (at(position.x+1, j).status == CellStatus.OCCUPIED) {
-                return Node(Vec2(position.x+1, j), "")
+                return Node(Vec2(position.x+1, j))
             }
         }
 

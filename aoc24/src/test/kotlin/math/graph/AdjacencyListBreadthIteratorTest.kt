@@ -9,7 +9,7 @@ import io.kotest.matchers.shouldBe
 
 class AdjacencyListBreadthIteratorTest: ShouldSpec({
     context("empty graph") {
-        val graph = AdjacencyList<Int, Int>(hashMapOf())
+        val graph = AdjacencyList<Int>(hashMapOf())
         val iterator = AdjacencyListBreadth(graph)
 
         should("have no next") {
@@ -23,14 +23,14 @@ class AdjacencyListBreadthIteratorTest: ShouldSpec({
     }
 
     context("graph with one element") {
-        val graph = AdjacencyList<Int, Int>(hashMapOf(
-            Node(1,1) to mutableListOf()
+        val graph = AdjacencyList(hashMapOf(
+            Node(1) to mutableListOf()
         ))
         val iterator = AdjacencyListBreadth(graph)
 
         should("have next") {
             iterator.hasNext() shouldBe true
-            iterator.next() shouldBe Node(1, 1)
+            iterator.next() shouldBe Node(1)
             iterator.hasNext() shouldBe false
         }
     }

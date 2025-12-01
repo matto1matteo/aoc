@@ -8,20 +8,20 @@ import io.kotest.matchers.shouldBe
 
 class GraphPathTest : ShouldSpec({
     context("Empty graph") {
-        val graph : Graph<Int, String> = AdjacencyList(kotlin.collections.HashMap())
+        val graph : Graph<String> = AdjacencyList(kotlin.collections.HashMap())
         should("have no path") {
             graph.hasPath("mele", "pere") shouldBe false
         }
     }
 
     context("Sparse graph") {
-        var nodes : HashMap<Node<Int, String>, MutableList<Node<Int, String>>> = HashMap(
+        var nodes : HashMap<Node<String>, MutableList<Node<String>>> = HashMap(
             mapOf(
-                Node(1, "1") to mutableListOf(),
-                Node(2, "2") to mutableListOf(Node(1, "1"))
+                Node("1") to mutableListOf(),
+                Node("2") to mutableListOf(Node("1"))
             )
         )
-        val graph : Graph<Int, String> = AdjacencyList(nodes)
+        val graph : Graph<String> = AdjacencyList(nodes)
 
         should("have a path from 2 to 1") {
             graph.hasPath("2", "1") shouldBe true
@@ -35,13 +35,13 @@ class GraphPathTest : ShouldSpec({
     }
 
     context("Graph with a cycle") {
-        var nodes : HashMap<Node<Int, String>, MutableList<Node<Int, String>>> = HashMap(
+        var nodes : HashMap<Node<String>, MutableList<Node<String>>> = HashMap(
             mapOf(
-                Node(1, "1") to mutableListOf(Node(2, "2")),
-                Node(2, "2") to mutableListOf(Node(1, "1"))
+                Node("1") to mutableListOf(Node("2")),
+                Node("2") to mutableListOf(Node("1"))
             )
         )
-        val graph : Graph<Int, String> = AdjacencyList(map = nodes)
+        val graph : Graph<String> = AdjacencyList(map = nodes)
 
         should("show cycle") {
             graph.hasCycle("1") shouldBe true

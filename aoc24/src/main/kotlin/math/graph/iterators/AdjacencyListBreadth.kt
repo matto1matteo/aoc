@@ -5,13 +5,13 @@ import com.github.matto1matteo.collections.Queue
 import com.github.matto1matteo.math.graph.AdjacencyList
 import com.github.matto1matteo.math.graph.Node
 
-class AdjacencyListBreadth<T, L> : BreadthIterator<T, L> {
-    private val graph: AdjacencyList<T, L>
-    private val queue: Queue<Node<T, L>>
-    private val visited: MutableSet<Node<T, L>>
-    private var cursor: Node<T,L>?
+class AdjacencyListBreadth<L> : BreadthIterator<L> {
+    private val graph: AdjacencyList<L>
+    private val queue: Queue<Node<L>>
+    private val visited: MutableSet<Node<L>>
+    private var cursor: Node<L>?
 
-    constructor(graph: AdjacencyList<T, L>) : super() {
+    constructor(graph: AdjacencyList<L>) : super() {
         this.graph = graph
         this.queue = ListQueue()
         this.visited = mutableSetOf()
@@ -23,7 +23,7 @@ class AdjacencyListBreadth<T, L> : BreadthIterator<T, L> {
         return cursor != null
     }
 
-    override fun next(): Node<T, L> {
+    override fun next(): Node<L> {
         if (!hasNext()) {
             throw NoSuchElementException("No more nodes to iterate from the given root")
         }
