@@ -1,7 +1,7 @@
 namespace AOC25.Problems
 {
     class Day01
-        : Daily, IDisposable
+        : Daily
     {
         private enum Direction
         {
@@ -17,15 +17,12 @@ namespace AOC25.Problems
             stream = File.Open(fileName, FileMode.Open);
         }
 
-        public void Dispose()
-        {
-            stream.Flush();
-            stream.Close();
-        }
-
         private void initProblemInput()
         {
-            stream.Seek(0, SeekOrigin.Begin);
+            if (input.Any())
+            {
+                return;
+            }
             var reader = new StreamReader(stream);
             var line = reader.ReadLine();
             while (line is not null)
@@ -43,7 +40,7 @@ namespace AOC25.Problems
                 input.Add((direction, number));
                 line = reader.ReadLine();
             }
-
+            stream.Dispose();
         }
 
         private static int resetClock(int v)
@@ -109,14 +106,10 @@ namespace AOC25.Problems
 
         public string SecondSolution()
         {
-            if (!input.Any())
-            {
-                initProblemInput();
-            }
+            initProblemInput();
 
             var counter = 0;
             var partial = 50;
-            // Console.WriteLine("Starting at 50");
 
             foreach (var pair in input)
             {
@@ -126,16 +119,12 @@ namespace AOC25.Problems
                         value *= -1;
                     }
 
-                    // Console.WriteLine($"Direction: {direction}, Value: {Math.Abs(value)}, New Partial: {partial}");
-
                     counter += (value < 0)
                         ? countBackward(partial, value)
                         : countForward(partial, value);
 
                     partial += value;
                     partial = resetClock(partial);
-
-                    // Console.WriteLine($"Partial: {partial}, Counter: {counter}");
             }
             return counter.ToString();
         }
