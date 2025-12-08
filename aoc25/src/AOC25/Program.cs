@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Reflection;
 using AOC25.Problems;
 
 var basePath = Environment.GetEnvironmentVariable("AOC25_BASE_PATH");
@@ -7,6 +8,7 @@ var problems = new List<Daily>
     new Day01(Path.Join(basePath, "day01.txt")),
     new Day02(Path.Join(basePath, "day02.txt")),
     new Day03(Path.Join(basePath, "day03.txt")),
+    new Day04(Path.Join(basePath, "day04.txt")),
 };
 
 Console.WriteLine($"Advent of code 2025");
