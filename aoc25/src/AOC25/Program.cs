@@ -10,6 +10,7 @@ var problems = new List<Daily>
     new Day03(Path.Join(basePath, "day03.txt")),
     new Day04(Path.Join(basePath, "day04.txt")),
     new Day05(Path.Join(basePath, "day05.txt")),
+    new Day06(Path.Join(basePath, "day06.txt")),
 };
 
 Console.WriteLine($"Advent of code 2025");
